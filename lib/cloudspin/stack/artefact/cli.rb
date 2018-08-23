@@ -25,7 +25,7 @@ module Cloudspin
 
       desc 'package', 'Package the files'
       def package
-        puts "Create artefact '#{builder.artefact_name}'"
+        builder.package
       end
 
       desc 'publish', 'Upload the package'
