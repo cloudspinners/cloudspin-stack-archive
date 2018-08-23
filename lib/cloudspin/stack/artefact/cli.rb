@@ -12,26 +12,20 @@ module Cloudspin
         :default => './src',
         :desc => 'Terraform project source files will be copied from this folder'
 
-      class_option :build_folder,
-        :aliases => '-w',
-        :banner => 'PATH',
-        :default => './build',
-        :desc => 'Files to be included in the artefact will be copied to this folder'
-
       class_option :dist_folder,
-        :aliases => '-w',
+        :aliases => '-d',
         :banner => 'PATH',
-        :default => './build',
+        :default => './dist',
         :desc => 'The artefact will be created in this folder'
 
       desc 'build', 'Prepare files to be packaged'
       def build
-        puts 'build'
+        builder.build
       end
 
       desc 'package', 'Package the files'
       def package
-        puts 'package'
+        puts "Create artefact '#{builder.artefact_name}'"
       end
 
       desc 'publish', 'Upload the package'
@@ -46,6 +40,11 @@ module Cloudspin
 
 
       no_commands do
+        def builder
+          Cloudspin::Stack::Artefact::Builder.new(stack_definition: stack_definition,
+                                                  dist_folder: options[:dist_folder])
+        end
+
         def stack_definition
           Cloudspin::Stack::Definition.from_file(options[:terraform_source] + '/stack.yaml')
         end
