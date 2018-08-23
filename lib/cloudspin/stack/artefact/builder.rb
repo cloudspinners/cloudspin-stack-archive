@@ -22,17 +22,22 @@ module Cloudspin
         end
 
         def build
-          puts "Copying files to include in the artefact from #{stack_definition.terraform_source_path} to #{build_folder}/src."
-          mkpath File.dirname(dist_folder + '/src')
-          cp_r(stack_definition.terraform_source_path, build_folder + '/src')
+          puts "Copying files to include in the artefact from #{stack_definition.terraform_source_path} to #{artefact_contents_folder}/src."
+          rm_rf(artefact_contents_folder)
+          mkpath File.dirname(artefact_contents_folder + '/src')
+          cp_r(stack_definition.terraform_source_path, artefact_contents_folder + '/src')
         end
 
         def package(version)
-          puts "Assemble the files from #{build_folder} into an artefact in #{dist_folder}"
+          puts "Assemble the files from #{artefact_contents_folder} into an artefact in #{dist_folder}"
         end
 
         def artefact_name
           stack_definition_name + '-' + stack_definition_version
+        end
+
+        def artefact_contents_folder
+          dist_folder + '/' + artefact_name
         end
 
       end
