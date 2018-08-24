@@ -18,12 +18,12 @@ module Cloudspin
         :default => './dist',
         :desc => 'The artefact will be created in this folder'
 
-      desc 'build', 'Prepare files to be packaged'
+      desc 'build', 'Assemble the files to be packaged'
       def build
         builder.build
       end
 
-      desc 'package', 'Package the files'
+      desc 'dist', 'Package the files'
       def package
         builder.package
       end
