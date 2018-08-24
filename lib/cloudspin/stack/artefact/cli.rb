@@ -19,7 +19,12 @@ module Cloudspin
         :desc => 'The artefact will be created in this folder'
 
       desc 'build', 'Assemble the files to be packaged'
+      option :inspec_folder,
+          :aliases => '-i',
+          :banner => 'PATH',
+          :default => './inspec'
       def build
+        add_folder(options[:inspec_folder])
         builder.build
       end
 
@@ -41,12 +46,18 @@ module Cloudspin
 
       no_commands do
         def builder
-          Cloudspin::Stack::Artefact::Builder.new(stack_definition: stack_definition,
-                                                  dist_folder: options[:dist_folder])
+          @builder ||= Cloudspin::Stack::Artefact::Builder.new(
+            stack_definition: stack_definition,
+            dist_folder: options[:dist_folder]
+          )
+        end
+
+        def add_folder(folder = nil)
+          builder.add_folder_to_package(folder) if Dir.exists?(folder)
         end
 
         def stack_definition
-          Cloudspin::Stack::Definition.from_file(options[:terraform_source] + '/stack.yaml')
+          @definition ||= Cloudspin::Stack::Definition.from_file(options[:terraform_source] + '/stack.yaml')
         end
       end
 

@@ -35,4 +35,9 @@ RSpec.describe Cloudspin::Stack::Artefact::Builder do
     expect(builder.folders_to_package).to include('./tests' => 'tests')
   end
 
+  it 'uses source folder name for target folder name by default' do
+    builder.add_folder_to_package('./path/xtests')
+    expect(builder.folders_to_package).to include('./path/xtests' => 'xtests')
+  end
+
 end

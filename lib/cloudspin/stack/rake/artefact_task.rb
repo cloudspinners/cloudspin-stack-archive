@@ -12,7 +12,8 @@ module Cloudspin
 
         def define
           desc 'Assemble files to be packaged'
-          task :build do |t, args|
+          task :build, [:inspec_folder] do |t, args|
+            add_folder(args[:inspec_folder] || './inspec')
             builder.build
           end
 
@@ -22,13 +23,19 @@ module Cloudspin
           end
         end
 
+        def add_folder(folder = nil)
+          builder.add_folder_to_package(folder) if Dir.exists?(folder)
+        end
+
         def builder
-          Cloudspin::Stack::Artefact::Builder.new(stack_definition: stack_definition,
-                                                  dist_folder: @dist_folder)
+          @builder ||= Cloudspin::Stack::Artefact::Builder.new(
+            stack_definition: stack_definition,
+            dist_folder: @dist_folder
+          )
         end
 
         def stack_definition
-          Cloudspin::Stack::Definition.from_file(@definition_folder + '/stack.yaml')
+          @definition ||= Cloudspin::Stack::Definition.from_file(@definition_folder + '/stack.yaml')
         end
 
       end

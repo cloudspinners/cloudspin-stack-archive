@@ -39,7 +39,8 @@ module Cloudspin
           }
         end
 
-        def add_folder_to_package(source_folder, artefact_subfolder:)
+        def add_folder_to_package(source_folder, artefact_subfolder: nil)
+          artefact_subfolder ||= File.basename(source_folder)
           @folders_to_package[source_folder] = artefact_subfolder
         end
 
