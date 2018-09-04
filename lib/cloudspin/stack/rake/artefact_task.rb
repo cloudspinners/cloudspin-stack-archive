@@ -12,8 +12,9 @@ module Cloudspin
 
         def define
           desc 'Assemble files to be packaged'
-          task :build, [:inspec_folder] do |t, args|
+          task :build, [:inspec_folder, :config_file] do |t, args|
             add_folder(args[:inspec_folder] || './inspec')
+            add_file(args[:config_file] || './spin-default.yaml')
             builder.build
           end
 
@@ -23,8 +24,12 @@ module Cloudspin
           end
         end
 
-        def add_folder(folder = nil)
+        def add_folder(folder)
           builder.add_folder_to_package(folder) if Dir.exists?(folder)
+        end
+
+        def add_file(filename)
+          builder.add_file_to_package(filename) if File.exists?(filename)
         end
 
         def builder

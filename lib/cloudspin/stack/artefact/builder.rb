@@ -17,6 +17,7 @@ module Cloudspin
         attr_reader :stack_definition_version
         attr_reader :dist_folder
         attr_reader :folders_to_package
+        attr_reader :files_to_package
 
         def initialize(stack_definition:,
                        dist_folder:)
@@ -27,6 +28,7 @@ module Cloudspin
           @folders_to_package = {
             stack_definition.terraform_source_path => 'src'
           }
+          @files_to_package = []
         end
 
         def build
@@ -37,11 +39,19 @@ module Cloudspin
             mkpath File.dirname(artefact_contents_folder + '/' + destination)
             cp_r(source, artefact_contents_folder + '/' + destination)
           }
+          files_to_package.each { |file|
+            puts "Copying #{file} to #{artefact_contents_folder + '/' + file}"
+            cp(file, artefact_contents_folder + '/' + file)
+          }
         end
 
         def add_folder_to_package(source_folder, artefact_subfolder: nil)
           artefact_subfolder ||= File.basename(source_folder)
           @folders_to_package[source_folder] = artefact_subfolder
+        end
+
+        def add_file_to_package(source_file)
+          @files_to_package << source_file
         end
 
         def package
