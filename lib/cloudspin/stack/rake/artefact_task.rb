@@ -15,6 +15,10 @@ module Cloudspin
           task :build, [:inspec_folder, :config_file] do |t, args|
             add_folder(args[:inspec_folder] || './inspec')
             add_file(args[:config_file] || './spin-default.yaml')
+            add_file("./stack-instance-default.yaml")
+            add_file("./stack-instance-defaults.yaml")
+            add_file("./spin-local.yaml")
+            add_file("./stack-instance-local.yaml")
             builder.build
           end
 
