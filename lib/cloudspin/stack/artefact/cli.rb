@@ -6,11 +6,11 @@ module Cloudspin
 
     class CLI < Thor
 
-      class_option :terraform_source,
-        :aliases => '-t',
-        :banner => 'PATH',
-        :default => './src',
-        :desc => 'Terraform project source files will be copied from this folder'
+    class_option :source,
+      :aliases => '-s',
+      :banner => 'PATH',
+      :default => './src',
+      :desc => 'Folder with the terraform project source files'
 
       class_option :dist_folder,
         :aliases => '-d',
@@ -57,7 +57,7 @@ module Cloudspin
         end
 
         def stack_definition
-          @definition ||= Cloudspin::Stack::Definition.from_file(options[:terraform_source] + '/stack.yaml')
+          @definition ||= Cloudspin::Stack::Definition.from_file(options[:source] + '/stack-definition.yaml')
         end
       end
 

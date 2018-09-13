@@ -26,7 +26,7 @@ module Cloudspin
           @stack_definition_name = stack_definition.name
           @stack_definition_version = stack_definition.version
           @folders_to_package = {
-            stack_definition.terraform_source_path => 'src'
+            stack_definition.source_path => 'src'
           }
           @files_to_package = []
         end
