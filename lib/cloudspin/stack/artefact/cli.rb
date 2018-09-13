@@ -6,12 +6,6 @@ module Cloudspin
 
     class CLI < Thor
 
-    class_option :source,
-      :aliases => '-s',
-      :banner => 'PATH',
-      :default => './src',
-      :desc => 'Folder with the terraform project source files'
-
       class_option :dist_folder,
         :aliases => '-d',
         :banner => 'PATH',
@@ -19,12 +13,27 @@ module Cloudspin
         :desc => 'The artefact will be created in this folder'
 
       desc 'build', 'Assemble the files to be packaged'
-      option :inspec_folder,
-          :aliases => '-i',
+      option :test_folder,
+          :aliases => '-t',
           :banner => 'PATH',
-          :default => './inspec'
+          :default => './test'
+      option :environments_folder,
+          :aliases => '-e',
+          :banner => 'PATH',
+          :default => './environments'
+      option :instance_defaults_file,
+          :aliases => '-f',
+          :banner => 'FILENAME',
+          :default => './stack-instance-defaults.yaml'
+      option :source,
+        :aliases => '-s',
+        :banner => 'PATH',
+        :default => './src',
+        :desc => 'Folder with the terraform project source files'
       def build
-        add_folder(options[:inspec_folder])
+        add_folder(options[:test_folder])
+        add_folder(options[:environments_folder])
+        add_file(options[:instance_defaults_file])
         builder.build
       end
 
@@ -54,6 +63,10 @@ module Cloudspin
 
         def add_folder(folder = nil)
           builder.add_folder_to_package(folder) if Dir.exists?(folder)
+        end
+
+        def add_file(filename = nil)
+          builder.add_file_to_package(filename) if File.exists?(filename)
         end
 
         def stack_definition

@@ -12,13 +12,10 @@ module Cloudspin
 
         def define
           desc 'Assemble files to be packaged'
-          task :build, [:inspec_folder, :config_file] do |t, args|
-            add_folder(args[:inspec_folder] || './inspec')
-            add_file(args[:config_file] || './spin-default.yaml')
-            add_file("./stack-instance-default.yaml")
-            add_file("./stack-instance-defaults.yaml")
-            add_file("./spin-local.yaml")
-            add_file("./stack-instance-local.yaml")
+          task :build, [:test_folder, :environments_folder, :instance_defaults_file] do |t, args|
+            add_folder(args[:test_folder] || './test')
+            add_folder(args[:environments_folder] || './environments')
+            add_file(args[:instance_defaults_file] || './stack-instance-defaults.yaml')
             builder.build
           end
 
@@ -44,7 +41,7 @@ module Cloudspin
         end
 
         def stack_definition
-          @definition ||= Cloudspin::Stack::Definition.from_file(@definition_folder + '/stack.yaml')
+          @definition ||= Cloudspin::Stack::Definition.from_file(@definition_folder + '/stack-definition.yaml')
         end
 
       end
