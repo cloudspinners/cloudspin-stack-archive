@@ -35,6 +35,7 @@ module Cloudspin
         add_folder(options[:test_folder])
         add_folder(options[:environments_folder])
         add_file(options[:instance_defaults_file])
+        add_file('Rakefile') if File.exists? 'Rakefile'
         builder.build
       end
 

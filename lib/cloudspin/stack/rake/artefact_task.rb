@@ -16,6 +16,7 @@ module Cloudspin
             add_folder(args[:test_folder] || './test')
             add_folder(args[:environments_folder] || './environments')
             add_file(args[:instance_defaults_file] || './stack-instance-defaults.yaml')
+            add_file('Rakefile') if File.exists? 'Rakefile'
             builder.build
           end
 
