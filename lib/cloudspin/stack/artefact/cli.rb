@@ -12,6 +12,12 @@ module Cloudspin
         :default => './dist',
         :desc => 'The artefact will be created in this folder'
 
+      class_option :source,
+        :aliases => '-s',
+        :banner => 'PATH',
+        :default => './src',
+        :desc => 'Folder with the terraform project source files'
+
       desc 'build', 'Assemble the files to be packaged'
       option :test_folder,
           :aliases => '-t',
@@ -25,11 +31,6 @@ module Cloudspin
           :aliases => '-f',
           :banner => 'FILENAME',
           :default => './stack-instance-defaults.yaml'
-      option :source,
-        :aliases => '-s',
-        :banner => 'PATH',
-        :default => './src',
-        :desc => 'Folder with the terraform project source files'
       def build
         add_folder(options[:test_folder])
         add_folder(options[:environments_folder])
@@ -37,7 +38,7 @@ module Cloudspin
         builder.build
       end
 
-      desc 'dist', 'Package the files'
+      desc 'package', 'Package the files'
       def package
         builder.package
       end
@@ -70,7 +71,13 @@ module Cloudspin
         end
 
         def stack_definition
-          @definition ||= Cloudspin::Stack::Definition.from_file(options[:source] + '/stack-definition.yaml')
+          Cloudspin::Stack::Definition.from_file(stack_definition_file)
+        end
+
+        def stack_definition_file
+          raise NoStackDefinitionFolder unless Dir.exists? options[:source]
+          raise NoStackDefinitionConfigurationFile unless File.exists? "#{options[:source]}/stack-definition.yaml"
+          "#{options[:source]}/stack-definition.yaml"
         end
       end
 
@@ -79,6 +86,9 @@ module Cloudspin
       end
 
     end
+
+    class NoStackDefinitionFolder < StandardError; end
+    class NoStackDefinitionConfigurationFile < StandardError; end
 
   end
 
