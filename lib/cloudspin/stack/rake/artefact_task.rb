@@ -24,13 +24,6 @@ module Cloudspin
           task :package do |t, args|
             builder.package
           end
-
-          if stack_definition.github_tag?
-            desc "Tag the release version #{@definition.version} in github"
-            task :release do |t, args|
-              Cloudspin::Stack::Artefact::Release.new(@definition.version).tag_version
-            end
-          end
         end
 
         def add_folder(folder)

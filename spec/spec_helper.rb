@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'cloudspin/stack/artefact'
+require 'tempfile'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
