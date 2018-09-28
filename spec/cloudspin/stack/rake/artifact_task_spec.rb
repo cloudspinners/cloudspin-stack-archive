@@ -31,6 +31,10 @@ RSpec.describe Cloudspin::Stack::Rake::ArtefactTask do
       expect { task }.not_to raise_error
     end
 
+    it 'is defined without an error' do
+      expect { task.define }.not_to raise_error
+    end
+
   end
 
 end
